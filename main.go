@@ -14,6 +14,8 @@ func main() {
 		fmt.Printf("%d pair sum is (%d, %d)", k, x, y)
 	}
 
+	fmt.Printf("product list %v", productList([]int{1,2,3,4}))
+
 
 
 }
