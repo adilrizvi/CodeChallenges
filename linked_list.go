@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type node struct {
 	data int
@@ -87,25 +89,29 @@ func (ll *linkedList) delete(val int) {
 		return
 	}
 
-	if ll.head.data == val {
-		ll.deleteAtHead()
-		return
-	}
-
-	temp := ll.head
 	var prev *node
-	for {
-		if temp == nil {
+	for current := ll.head; ; {
+		if current == nil {
 			return
 		}
-		if temp.data == val {
+		if current.data == val {
 			fmt.Printf("deleting: %d\n", val)
-			prev.next = temp.next
-			temp = nil
-			return
+			if prev == nil {
+				//case : first element duplicated
+				ll.deleteAtHead()
+				// restart the process
+				current = ll.head
+			} else {
+				prev.next = current.next
+				current = current.next
+				//TODO: free memory for deleted node
+			}
+
+		} else {
+			prev = current
+			current = current.next
 		}
-		prev = temp
-		temp = temp.next
+
 	}
 
 }
@@ -123,4 +129,130 @@ func (ll *linkedList) deleteAtHead() {
 	temp.next = nil
 	temp = nil
 
+}
+
+func length(ll linkedList) int {
+	var ctr int
+
+	for temp := ll.head; ; {
+		if temp == nil {
+			return ctr
+		}
+		temp = temp.next
+		ctr++
+	}
+}
+
+func findMiddleNode(ll linkedList) (int, error) {
+
+	if ll.isEmpty() {
+		return 0, fmt.Errorf("Empty List")
+	}
+
+	if length(ll) <= 2 {
+		return ll.head.data, nil
+	}
+
+	// case length(ll) > 2
+	slow := ll.head
+	fast := ll.head.next
+
+	for {
+		if fast == nil || fast.next == nil {
+			return slow.data, nil
+		}
+		slow = slow.next
+		fast = fast.next.next
+
+	}
+
+}
+
+func reverse(ll linkedList) *node {
+
+	if ll.isEmpty() {
+		fmt.Println("Empty List")
+		return nil
+	}
+
+	var prev, next, current *node
+	current = ll.head
+	for {
+		if current == nil {
+			//ll.head = prev
+			return prev
+		}
+		next = current.next
+		current.next = prev
+		prev = current
+		current = next
+
+	}
+
+	return prev
+
+}
+
+func (ll *linkedList) deleteAtKIndex(index int) {
+
+	if ll.isEmpty() {
+		// TODO: possibly return error
+		fmt.Println("Empty List")
+		return
+	}
+
+	if (index + 1) > length(*ll) {
+		fmt.Println("Index (0 based) greater than length")
+		return
+
+	}
+
+	var current, prev *node
+	var ctr int
+	current = ll.head
+
+	for {
+		if current == nil {
+			return
+		}
+
+		if ctr == index {
+			prev.next = current.next
+			current = nil
+			return
+		}
+
+		prev = current
+		current = current.next
+		ctr++
+
+	}
+
+}
+
+func (ll *linkedList) removeDuplicates() {
+
+	for current := ll.head; ; {
+
+		if current == nil {
+			return
+		}
+
+		// deleting the duplicates from remaining linkedList
+		prev := current
+		for temp := current.next; ; {
+			if temp == nil {
+				break
+			}
+			if temp.data == current.data {
+				prev.next = temp.next
+			} else {
+				prev = temp
+			}
+			temp = temp.next
+		}
+
+		current = current.next
+
+	}
 }
