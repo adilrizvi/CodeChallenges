@@ -256,3 +256,120 @@ func (ll *linkedList) removeDuplicates() {
 
 	}
 }
+
+
+func union(ll1 linkedList, ll2 linkedList) linkedList {
+	ll := linkedList{}
+
+	valMap := make(map[int]int)
+
+	if ll1.isEmpty() {
+		return ll2
+	}
+	 if ll2.isEmpty() {
+	 	return ll1
+	 }
+
+	 // processing ll1
+	 for current:=ll1.head;; {
+	 	if current == nil {
+	 		break
+		}
+		_, ok := valMap[current.data]
+		if !ok {
+			valMap[current.data] = 1
+		}
+		current = current.next
+	 }
+
+	 // processing ll2
+	for current:=ll2.head;; {
+		if current == nil {
+			break
+		}
+		_, ok := valMap[current.data]
+		if !ok {
+			valMap[current.data] = 1
+		}
+		current = current.next
+	}
+
+
+	for val, _ := range valMap{
+		ll.insertAtHead(val)
+	}
+
+	return ll
+
+
+}
+
+
+func intersection(ll1 linkedList, ll2 linkedList) linkedList {
+	ll := linkedList{}
+
+	valMap := make(map[int]int)
+
+	if ll1.isEmpty() || ll2.isEmpty(){
+		return ll
+	}
+
+	// processing ll1
+	for current:=ll1.head;; {
+		if current == nil {
+			break
+		}
+		_, ok := valMap[current.data]
+		if !ok {
+			valMap[current.data] = 1
+		}
+		current = current.next
+	}
+
+	// processing ll2 and performing intersection
+	for current:=ll2.head;; {
+		if current == nil {
+			break
+		}
+		_, ok := valMap[current.data]
+		if ok {
+			valMap[current.data] = 2
+		}
+		current = current.next
+	}
+
+
+	for val, ctr := range valMap{
+		if ctr == 2{
+			ll.insertAtHead(val)
+		}
+
+	}
+
+	return ll
+
+
+}
+
+
+func (ll *linkedList) nthNodeFromEnd(n int) int {
+	if ll.isEmpty() {
+		return -1
+	}
+
+	if length(*ll) == 1 {
+		return ll.head.data
+	}
+
+	var ctr int
+	llLength := length(*ll)
+	for current:=ll.head ;; {
+		if ctr == llLength-n {
+			return current.data
+		}
+		current = current.next
+		ctr++
+	}
+
+
+}
