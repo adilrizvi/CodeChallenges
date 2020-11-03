@@ -30,6 +30,7 @@ func (st *stack) pop() (int, error) {
 	}
 	data := st.data[st.top]
 	st.top -= 1
+	st.data = st.data[:st.size()]
 	return data, nil
 }
 
