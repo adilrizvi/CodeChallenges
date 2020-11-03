@@ -1,0 +1,48 @@
+package main
+
+import (
+	"container/list"
+	"errors"
+)
+
+var emptyQueueErr error = errors.New(" empty queue")
+
+type queue struct {
+	data list.List
+}
+
+func (q *queue) enqueue(val interface{}) {
+	q.data.PushBack(val)
+}
+
+func (q *queue) dequeue() (interface{}, error){
+	if q.isEmpty() {
+		return -1, emptyQueueErr
+	}
+
+	// deletes the item from the front of the
+	// queue
+	// TODO: future should handle duplicates in queue
+	item := q.data.Front()
+	q.data.Remove(item)
+	return item.Value, nil
+}
+
+func (q *queue) isEmpty() bool{
+	return q.data.Len() == 0
+}
+
+func (q *queue) front() (interface{}, error) {
+	if q.isEmpty() {
+		return nil, emptyQueueErr
+	}
+	return q.data.Front().Value, nil
+}
+
+func (q *queue) back() (interface{}, error) {
+	if q.isEmpty() {
+		return nil, emptyQueueErr
+	}
+	return q.data.Back().Value, nil
+
+}
