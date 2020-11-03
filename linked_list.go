@@ -373,3 +373,23 @@ func (ll *linkedList) nthNodeFromEnd(n int) int {
 
 
 }
+
+func detectLoop(ll linkedList) bool {
+	visitedMap := make(map[*node]bool)
+
+	for current:=ll.head;;{
+		if current == nil {
+			return false
+		}
+
+		_, ok := visitedMap[current]
+		if ok {
+			return true
+
+		} else{
+			visitedMap[current] = true
+
+		}
+		current = current.next
+	}
+}
